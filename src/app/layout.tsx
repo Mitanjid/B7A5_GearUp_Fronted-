@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Toaster } from "@/components/ui/sonner";
 import { QueryProvider } from "@/components/shared/query-provider";
+import { Navbar } from "@/components/shared/navbar";
 import "./globals.css";
 
 export const metadata: Metadata = {
@@ -17,7 +18,8 @@ export default function RootLayout({
     <html lang="en">
       <body>
         <QueryProvider>
-          {children}
+          <Navbar />
+          <main>{children}</main>
           <Toaster />
         </QueryProvider>
       </body>
