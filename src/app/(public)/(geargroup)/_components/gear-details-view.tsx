@@ -7,6 +7,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 import { getGearById } from "../gear.action";
+import { RentNowDialog } from "./rent-now-dialog";  
 
 export function GearDetailsView({ gearId }: { gearId: string }) {
   const { data, isLoading, isError } = useQuery({
@@ -79,9 +80,7 @@ export function GearDetailsView({ gearId }: { gearId: string }) {
             {gear.isAvailable ? "(Available)" : "(Unavailable)"}
           </p>
 
-          <Button size="lg" disabled={!gear.isAvailable}>
-            Rent Now
-          </Button>
+          {gear.isAvailable && <RentNowDialog gearId={gearId} />}
         </div>
       </div>
     </div>
