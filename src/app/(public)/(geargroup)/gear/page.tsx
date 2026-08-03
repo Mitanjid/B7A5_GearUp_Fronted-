@@ -4,7 +4,7 @@ import { useQuery } from "@tanstack/react-query";
 
 import { GearCard } from "../_components/gear-card";
 import { Skeleton } from "@/components/ui/skeleton";
-import { getAllGear } from "../gear.action";
+import { getAllGear } from "../_action/gear.action";
 
 export default function GearBrowsePage() {
   const { data, isLoading, isError } = useQuery({

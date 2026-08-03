@@ -2,12 +2,11 @@
 
 import { useQuery } from "@tanstack/react-query";
 import Image from "next/image";
-
+import { getGearById } from "../_action/gear.action";
 import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
-import { getGearById } from "../gear.action";
-import { RentNowDialog } from "./rent-now-dialog";  
+import { BackButton } from "@/components/shared/back-button";
+import { RentNowDialog } from "./rent-now-dialog";
 
 export function GearDetailsView({ gearId }: { gearId: string }) {
   const { data, isLoading, isError } = useQuery({
@@ -18,6 +17,7 @@ export function GearDetailsView({ gearId }: { gearId: string }) {
   if (isLoading) {
     return (
       <div className="mx-auto max-w-6xl px-4 py-8">
+        <BackButton />
         <Skeleton className="h-96 w-full rounded-lg" />
       </div>
     );
@@ -25,8 +25,9 @@ export function GearDetailsView({ gearId }: { gearId: string }) {
 
   if (isError || !data) {
     return (
-      <div className="mx-auto max-w-6xl px-4 py-8 text-center text-destructive">
-        Gear not found.
+      <div className="mx-auto max-w-6xl px-4 py-8">
+        <BackButton />
+        <p className="text-center text-destructive">Gear not found.</p>
       </div>
     );
   }
@@ -35,6 +36,7 @@ export function GearDetailsView({ gearId }: { gearId: string }) {
 
   return (
     <div className="mx-auto max-w-6xl px-4 py-8">
+      <BackButton />
       <div className="grid gap-8 md:grid-cols-2">
         <div className="relative aspect-square w-full rounded-lg bg-muted">
           {gear.imageUrl ? (
@@ -80,7 +82,7 @@ export function GearDetailsView({ gearId }: { gearId: string }) {
             {gear.isAvailable ? "(Available)" : "(Unavailable)"}
           </p>
 
-          {gear.isAvailable && <RentNowDialog gearId={gearId} />}
+          {gear.isAvailable && <RentNowDialog gearId={gear.id} />}
         </div>
       </div>
     </div>

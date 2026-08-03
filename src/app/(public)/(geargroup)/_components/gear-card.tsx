@@ -2,8 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { GearItem } from "../gear.action";
-
+import { GearItem } from "../_action/gear.action";
 
 export function GearCard({ gear }: { gear: GearItem }) {
   return (

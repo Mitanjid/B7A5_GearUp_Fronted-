@@ -7,6 +7,7 @@ import { useAuthStore } from "@/store/auth-store";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
+import { BackButton } from "@/components/shared/back-button";
 
 const statusColors: Record<string, string> = {
   PLACED: "bg-yellow-100 text-yellow-800",
@@ -39,6 +40,7 @@ export default function CustomerOrdersPage() {
 
   return (
     <div>
+      <BackButton />
       <h1 className="mb-6 text-2xl font-bold">My Orders</h1>
 
       {rentals.length === 0 ? (
