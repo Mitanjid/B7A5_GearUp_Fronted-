@@ -35,7 +35,7 @@ export function UserTable() {
   const accessToken = useAuthStore((state) => state.accessToken);
   const queryClient = useQueryClient();
   const [loadingId, setLoadingId] = useState<string | null>(null);
-  const [openDialogId, setOpenDialogId] = useState<string | null>(null); // 👈 নতুন
+  const [openDialogId, setOpenDialogId] = useState<string | null>(null);
 
   const { data, isLoading } = useQuery({
     queryKey: ["admin-users"],
@@ -52,7 +52,7 @@ export function UserTable() {
         `User ${newStatus === "SUSPENDED" ? "suspended" : "activated"}`,
       );
       queryClient.invalidateQueries({ queryKey: ["admin-users"] });
-      setOpenDialogId(null); // 👈 নতুন - এখানে Explicitly বন্ধ করছি
+      setOpenDialogId(null);
     } catch (error) {
       toast.error(
         error instanceof Error ? error.message : "Failed to update status",
@@ -75,6 +75,7 @@ export function UserTable() {
           <TableHead>Role</TableHead>
           <TableHead>Status</TableHead>
           <TableHead>Action</TableHead>
+          <TableHead>createdAt</TableHead>
         </TableRow>
       </TableHeader>
       <TableBody>
@@ -119,6 +120,8 @@ export function UserTable() {
                       This will{" "}
                       {user.status === "ACTIVE" ? "suspend" : "activate"}{" "}
                       {user.name}&apos;s account.
+                      <br />
+                      User ID: {user.id}
                     </AlertDialogDescription>
                   </AlertDialogHeader>
                   <AlertDialogFooter>
@@ -132,6 +135,9 @@ export function UserTable() {
                   </AlertDialogFooter>
                 </AlertDialogContent>
               </AlertDialog>
+            </TableCell>
+            <TableCell>
+              {new Date(user.createdAt).toLocaleDateString()}
             </TableCell>
           </TableRow>
         ))}

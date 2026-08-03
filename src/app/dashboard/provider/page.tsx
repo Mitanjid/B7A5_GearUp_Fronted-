@@ -14,13 +14,21 @@ export default function ProviderDashboardPage() {
 
       <div className="mt-4 flex gap-3">
         <Button
+          variant="outline"
           nativeButton={false}
           render={<Link href="/dashboard/provider/gear">Manage My Gear</Link>}
         />
+
         <Button
           variant="outline"
           nativeButton={false}
           render={<Link href="/dashboard/provider/orders">Manage Orders</Link>}
+        />
+
+        <Button
+          variant="outline"
+          nativeButton={false}
+          render={<Link href="/dashboard/provider/gear/new">Add New Gear</Link>}
         />
       </div>
     </div>
