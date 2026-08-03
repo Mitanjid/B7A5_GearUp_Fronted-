@@ -36,7 +36,6 @@ export function Navbar() {
         <Link href="/" className="text-xl font-bold">
           GearUp 🏋️
         </Link>
-
         <nav className="hidden items-center gap-6 md:flex">
           <Link href="/" className="text-sm font-medium hover:text-primary">
             Home
@@ -44,6 +43,14 @@ export function Navbar() {
           <Link href="/gear" className="text-sm font-medium hover:text-primary">
             Browse Gear
           </Link>
+          {isAuthenticated && (
+            <Link
+              href={dashboardPath}
+              className="text-sm font-medium hover:text-primary"
+            >
+              Dashboard
+            </Link>
+          )}
         </nav>
 
         <div className="flex items-center gap-3">
