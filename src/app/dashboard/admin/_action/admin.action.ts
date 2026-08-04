@@ -66,3 +66,15 @@ export async function getAllGearAdmin(token: string) {
 export async function getAllRentalsAdmin(token: string) {
   return apiClient.get<RentalListResponse>("/api/admin/rentals", token);
 }
+export async function getAdminStats(token: string) {
+  const [usersRes, gearRes, rentalsRes] = await Promise.all([
+    getAllUsers(token),
+    getAllGearAdmin(token),
+    getAllRentalsAdmin(token),
+  ]);
+  return {
+    totalUsers: usersRes.data.length,
+    totalGear: gearRes.data.length,
+    totalRentals: rentalsRes.data.length,
+  };
+}
