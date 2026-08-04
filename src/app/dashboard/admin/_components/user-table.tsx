@@ -30,7 +30,7 @@ import {
 } from "@/components/ui/alert-dialog";
 import { Skeleton } from "@/components/ui/skeleton";
 import { toast } from "sonner";
-import { BackButton } from "@/components/shared/back-button";
+
 
 export function UserTable() {
   const accessToken = useAuthStore((state) => state.accessToken);

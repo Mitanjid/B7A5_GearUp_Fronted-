@@ -8,6 +8,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 import { BackButton } from "@/components/shared/back-button";
+import { ReviewDialog } from "../_components/review-dialog";
 
 const statusColors: Record<string, string> = {
   PLACED: "bg-yellow-100 text-yellow-800",
@@ -78,6 +79,10 @@ export default function CustomerOrdersPage() {
                       </Link>
                     }
                   />
+                )}
+
+                {rental.status === "RETURNED" && (
+                  <ReviewDialog rentalOrderId={rental.id} />
                 )}
               </div>
             </div>
