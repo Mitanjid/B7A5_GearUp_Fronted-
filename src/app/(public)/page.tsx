@@ -1,7 +1,11 @@
+"use client";
+
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
+import { useAuthStore } from "@/store/auth-store";
 
 export default function HomePage() {
+   const isAuthenticated = useAuthStore((state) => state.isAuthenticated);
   return (
     <div className="mx-auto max-w-6xl px-4 py-16">
       <div className="text-center">
@@ -17,12 +21,14 @@ export default function HomePage() {
             nativeButton={false}
             render={<Link href="/gear">Browse Gear</Link>}
           />
-          <Button
-            size="lg"
-            variant="outline"
-            nativeButton={false}
-            render={<Link href="/register">Get Started</Link>}
-          />
+          {!isAuthenticated && (
+            <Button
+              size="lg"
+              variant="outline"
+              nativeButton={false}
+              render={<Link href="/register">Get Started</Link>}
+            />
+          )}
         </div>
       </div>
     </div>

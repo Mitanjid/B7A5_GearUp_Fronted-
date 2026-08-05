@@ -2,13 +2,13 @@ import Image from "next/image";
 import Link from "next/link";
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { GearItem } from "../_action/gear.action";
+import type { GearItem } from "../_action/gear.action";
 
 export function GearCard({ gear }: { gear: GearItem }) {
   return (
     <Link href={`/gear/${gear.id}`}>
-      <Card className="overflow-hidden py-0 transition-shadow hover:shadow-md">
-        <div className="relative aspect-video w-full bg-muted">
+      <Card className="flex h-full flex-col overflow-hidden py-0 transition-shadow hover:shadow-md">
+        <div className="relative aspect-video w-full shrink-0 bg-muted">
           {gear.imageUrl ? (
             <Image
               src={gear.imageUrl}
@@ -28,14 +28,16 @@ export function GearCard({ gear }: { gear: GearItem }) {
           )}
         </div>
 
-        <CardContent className="space-y-2 pb-0">
+        <CardContent className="flex-1 space-y-2 pb-0">
           <div className="flex items-start justify-between gap-2">
-            <h3 className="font-semibold">{gear.name}</h3>
-            <Badge variant="secondary">{gear.category.name}</Badge>
+            <h3 className="line-clamp-1 font-semibold">{gear.name}</h3>
+            <Badge variant="secondary" className="shrink-0">
+              {gear.category.name}
+            </Badge>
           </div>
-          {gear.brand && (
-            <p className="text-sm text-muted-foreground">{gear.brand}</p>
-          )}
+          <p className="line-clamp-1 text-sm text-muted-foreground">
+            {gear.brand || "\u00A0"}
+          </p>
         </CardContent>
 
         <CardFooter className="pb-4">

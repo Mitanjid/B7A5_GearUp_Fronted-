@@ -6,11 +6,11 @@ import {
   getAllCategoriesAdmin,
   createCategory,
   deleteCategory,
+  updateCategory,
 } from "../_action/category.action";
 import { useAuthStore } from "@/store/auth-store";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
 import { toast } from "sonner";
 
@@ -20,7 +20,8 @@ export function CategoryManager() {
   const [name, setName] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [deletingId, setDeletingId] = useState<string | null>(null);
-
+const [editingId, setEditingId] = useState<string | null>(null);
+const [editingName, setEditingName] = useState("");
   const { data, isLoading } = useQuery({
     queryKey: ["admin-categories"],
     queryFn: () => getAllCategoriesAdmin(),
@@ -47,16 +48,45 @@ export function CategoryManager() {
 
   const handleDelete = async (id: string) => {
     setDeletingId(id);
+
     try {
       await deleteCategory(id, accessToken!);
       toast.success("Category deleted");
-      queryClient.invalidateQueries({ queryKey: ["admin-categories"] });
+      queryClient.invalidateQueries({
+        queryKey: ["admin-categories"],
+      });
     } catch (error) {
       toast.error(
         error instanceof Error ? error.message : "Failed to delete category",
       );
     } finally {
       setDeletingId(null);
+    }
+  };
+  const handleUpdate = async () => {
+    if (!editingId) return;
+
+    try {
+      await updateCategory(
+        editingId,
+        {
+          name: editingName,
+        },
+        accessToken!,
+      );
+
+      toast.success("Category updated");
+
+      queryClient.invalidateQueries({
+        queryKey: ["admin-categories"],
+      });
+
+      setEditingId(null);
+      setEditingName("");
+    } catch (error) {
+      toast.error(
+        error instanceof Error ? error.message : "Failed to update category",
+      );
     }
   };
 
@@ -78,24 +108,66 @@ export function CategoryManager() {
       ) : (
         <div className="flex flex-wrap gap-2">
           {categories.map((cat) => (
-            <Badge
+            <div
               key={cat.id}
-              variant="secondary"
-              className="gap-2 py-1.5 pr-1.5"
+              className="flex items-center justify-between rounded-lg border p-3"
             >
-              {cat.name}
-              <button
-                type="button"
-                onClick={() => handleDelete(cat.id)}
-                disabled={deletingId === cat.id}
-                className="rounded-full px-1 hover:bg-destructive/20"
-              >
-                ×
-              </button>
-            </Badge>
+              {editingId === cat.id ? (
+                <Input
+                  value={editingName}
+                  onChange={(e) => setEditingName(e.target.value)}
+                  className="mr-3"
+                />
+              ) : (
+                <span className="font-medium">{cat.name}</span>
+              )}
+
+              <div className="flex gap-2">
+                {editingId === cat.id ? (
+                  <>
+                    <Button size="sm" onClick={handleUpdate}>
+                      Save
+                    </Button>
+
+                    <Button
+                      size="sm"
+                      variant="outline"
+                      onClick={() => {
+                        setEditingId(null);
+                        setEditingName("");
+                      }}
+                    >
+                      Cancel
+                    </Button>
+                  </>
+                ) : (
+                  <>
+                    <Button
+                      size="sm"
+                      variant="outline"
+                      onClick={() => {
+                        setEditingId(cat.id);
+                        setEditingName(cat.name);
+                      }}
+                    >
+                      Edit
+                    </Button>
+
+                    <Button
+                      size="sm"
+                      variant="destructive"
+                      disabled={deletingId === cat.id}
+                      onClick={() => handleDelete(cat.id)}
+                    >
+                      {deletingId === cat.id ? "Deleting..." : "Delete"}
+                    </Button>
+                  </>
+                )}
+              </div>
+            </div>
           ))}
         </div>
       )}
     </div>
   );
-}
+};

@@ -1,3 +1,4 @@
+import { DashboardLayout } from "@/components/shared/dashboard-sidebar/dashboard-layout";
 import { RoleGuard } from "@/components/shared/role-guard";
 
 export default function AdminLayout({
@@ -5,5 +6,10 @@ export default function AdminLayout({
 }: {
   children: React.ReactNode;
 }) {
-  return <RoleGuard allowedRole="ADMIN">{children}</RoleGuard>;
+  return (
+    <RoleGuard allowedRole="ADMIN">
+      <DashboardLayout>{children}</DashboardLayout>;
+    </RoleGuard>
+  );
+ 
 }
