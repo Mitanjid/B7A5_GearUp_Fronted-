@@ -1,4 +1,5 @@
 import { apiClient } from "@/lib/api-client";
+import { z } from "zod";
 
 interface CreateGearPayload {
   name: string;
@@ -15,9 +16,9 @@ export interface ProviderGearItem {
   name: string;
   pricePerDay: string;
   stock: number;
-  isAvailable: boolean;
   imageUrl: string | null;
   category: { name: string };
+  isAvailable: boolean;
 }
 
 interface ProviderGearListResponse {
@@ -39,4 +40,23 @@ export async function getMyGear(token: string) {
 
 export async function deleteGear(id: string, token: string) {
   return apiClient.delete(`/api/gear/provider/${id}`, token);
+}
+export async function getGearByIdProvider(id: string, token: string) {
+  return apiClient.get<{
+    success: boolean;
+    message: string;
+    data: ProviderGearItem & {
+      description: string | null;
+      brand: string | null;
+      categoryId: string;
+    };
+  }>(`/api/gear/${id}`, token);
+}
+
+export async function updateGear(
+  id: string,
+  payload: Partial<CreateGearPayload>,
+  token: string,
+) {
+  return apiClient.patch(`/api/gear/provider/${id}`, payload, token);
 }
