@@ -4,6 +4,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useAuthStore } from "@/store/auth-store";
 import { cn } from "@/lib/utils";
+
 import {
   LayoutDashboard,
   Package,
@@ -23,17 +24,34 @@ interface NavItem {
 
 const navConfig: Record<"CUSTOMER" | "PROVIDER" | "ADMIN", NavItem[]> = {
   CUSTOMER: [
-    { href: "/dashboard/customer", label: "Overview", icon: LayoutDashboard },
+    {
+      href: "/dashboard/customer",
+      label: "Overview",
+      icon: LayoutDashboard,
+    },
     {
       href: "/dashboard/customer/orders",
       label: "My Orders",
       icon: ClipboardList,
     },
-    { href: "/dashboard/customer/reviews", label: "My Reviews", icon: Star },
+    {
+      href: "/dashboard/customer/reviews",
+      label: "My Reviews",
+      icon: Star,
+    },
   ],
+
   PROVIDER: [
-    { href: "/dashboard/provider", label: "Overview", icon: LayoutDashboard },
-    { href: "/dashboard/provider/gear", label: "My Gear", icon: Package },
+    {
+      href: "/dashboard/provider",
+      label: "Overview",
+      icon: LayoutDashboard,
+    },
+    {
+      href: "/dashboard/provider/gear",
+      label: "My Gear",
+      icon: Package,
+    },
     {
       href: "/dashboard/provider/gear/new",
       label: "Add Gear",
@@ -45,12 +63,33 @@ const navConfig: Record<"CUSTOMER" | "PROVIDER" | "ADMIN", NavItem[]> = {
       icon: ClipboardList,
     },
   ],
+
   ADMIN: [
-    { href: "/dashboard/admin", label: "Overview", icon: LayoutDashboard },
-    { href: "/dashboard/admin/users", label: "Users", icon: Users },
-    { href: "/dashboard/admin/gear", label: "Gear", icon: Boxes },
-    { href: "/dashboard/admin/rentals", label: "Rentals", icon: ClipboardList },
-    { href: "/dashboard/admin/categories", label: "Categories", icon: Tags },
+    {
+      href: "/dashboard/admin",
+      label: "Overview",
+      icon: LayoutDashboard,
+    },
+    {
+      href: "/dashboard/admin/users",
+      label: "Users",
+      icon: Users,
+    },
+    {
+      href: "/dashboard/admin/gear",
+      label: "Gear",
+      icon: Boxes,
+    },
+    {
+      href: "/dashboard/admin/rentals",
+      label: "Rentals",
+      icon: ClipboardList,
+    },
+    {
+      href: "/dashboard/admin/categories",
+      label: "Categories",
+      icon: Tags,
+    },
   ],
 };
 
@@ -63,9 +102,9 @@ export function DashboardSidebar() {
   const items = navConfig[user.role];
 
   return (
-    <aside className="sticky top-16 hidden h-[calc(100vh-4rem)] w-64 shrink-0 border-r border-border/40 bg-background/70 backdrop-blur-xl md:block">
-      <nav className="flex flex-col gap-1 p-4">
-        <p className="px-3 pb-2 text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+    <aside className="sticky top-16 hidden h-[calc(100vh-4rem)] w-56 shrink-0 border-r border-border/50 bg-background md:block">
+      <nav className="flex flex-col gap-1 px-3 py-6">
+        <p className="px-3 pb-3 text-xs font-semibold uppercase tracking-wider text-muted-foreground">
           {user.role === "ADMIN"
             ? "Admin Panel"
             : user.role === "PROVIDER"
@@ -79,18 +118,20 @@ export function DashboardSidebar() {
             (item.href !== `/dashboard/${user.role.toLowerCase()}` &&
               pathname.startsWith(item.href));
 
+          const Icon = item.icon;
+
           return (
             <Link
               key={item.href}
               href={item.href}
               className={cn(
-                "flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition-colors",
+                "flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium transition-all",
                 isActive
                   ? "bg-primary/10 text-primary"
-                  : "text-muted-foreground hover:bg-muted hover:text-foreground",
+                  : "text-muted-foreground hover:bg-muted/70 hover:text-foreground",
               )}
             >
-              <item.icon className="size-4" />
+              <Icon className="size-4 shrink-0" />
               {item.label}
             </Link>
           );
