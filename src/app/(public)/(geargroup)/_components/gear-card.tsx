@@ -14,7 +14,8 @@ export function GearCard({ gear }: { gear: GearItem }) {
               src={gear.imageUrl}
               alt={gear.name}
               fill
-              className="object-cover"
+              sizes="(max-width: 768px) 100vw, 672px"
+              className="rounded-lg object-contain"
             />
           ) : (
             <div className="flex h-full items-center justify-center text-muted-foreground">

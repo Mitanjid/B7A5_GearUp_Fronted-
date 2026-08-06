@@ -92,9 +92,7 @@ export function MyGearTable() {
                 variant="outline"
                 nativeButton={false}
                 render={
-                  <Link href={`/dashboard/provider/gear/${gear.id}/edit`}>
-                    Edit
-                  </Link>
+                  <Link href={`/dashboard/provider/gear/${gear.id}`}>View</Link>
                 }
               />
 

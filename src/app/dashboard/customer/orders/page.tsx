@@ -2,6 +2,7 @@
 
 import { useQuery } from "@tanstack/react-query";
 import Link from "next/link";
+import { Star } from "lucide-react";
 import { getCustomerRentals } from "../_action/rental.action";
 import { useAuthStore } from "@/store/auth-store";
 import { Badge } from "@/components/ui/badge";
@@ -81,9 +82,23 @@ export default function CustomerOrdersPage() {
                   />
                 )}
 
-                {rental.status === "RETURNED" && (
-                  <ReviewDialog rentalOrderId={rental.id} />
-                )}
+                {rental.status === "RETURNED" &&
+                  (rental.review ? (
+                    <div className="flex items-center gap-0.5">
+                      {[1, 2, 3, 4, 5].map((i) => (
+                        <Star
+                          key={i}
+                          className={`size-4 ${
+                            i <= rental.review!.rating
+                              ? "fill-yellow-400 text-yellow-400"
+                              : "text-muted-foreground"
+                          }`}
+                        />
+                      ))}
+                    </div>
+                  ) : (
+                    <ReviewDialog rentalOrderId={rental.id} />
+                  ))}
               </div>
             </div>
           ))}

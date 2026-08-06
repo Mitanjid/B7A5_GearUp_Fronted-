@@ -38,6 +38,7 @@ export interface AdminRentalOrder {
   endDate: string;
   totalAmount: string;
   status: string;
+  createdAt: string;
   gearItem: { name: string };
   customer: { name: string; email: string };
 }

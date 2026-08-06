@@ -14,6 +14,7 @@ import {
   Tags,
   Star,
   PlusCircle,
+  CreditCard,
 } from "lucide-react";
 
 interface NavItem {
@@ -38,6 +39,11 @@ const navConfig: Record<"CUSTOMER" | "PROVIDER" | "ADMIN", NavItem[]> = {
       href: "/dashboard/customer/reviews",
       label: "My Reviews",
       icon: Star,
+    },
+    {
+      href: "/dashboard/customer/payments",
+      label: "Payments",
+      icon: CreditCard,
     },
   ],
 

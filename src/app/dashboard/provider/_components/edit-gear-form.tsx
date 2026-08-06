@@ -25,11 +25,25 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { toast } from "sonner";
 import { getAllCategories } from "@/app/(public)/(geargroup)/_action/category.action";
 
-export function EditGearForm({ gearId }: { gearId: string }) {
+interface EditGearFormProps {
+  gearId: string;
+  onSuccess?: () => void;
+  onCancel?: () => void;
+}
+
+export function EditGearForm({
+  gearId,
+  onSuccess,
+  onCancel,
+}: EditGearFormProps) {
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
-  const [isAvailable, setIsAvailable] = useState(true);
+  // null মানে user এখনো toggle করেনি — তখন fetched data থেকে value নেওয়া হবে
+  const [isAvailableOverride, setIsAvailableOverride] = useState<
+    boolean | null
+  >(null);
   const accessToken = useAuthStore((state) => state.accessToken);
+  const queryClient = useQueryClient();
 
   const { data: gearData, isLoading: isGearLoading } = useQuery({
     queryKey: ["provider-gear", gearId],
@@ -43,7 +57,10 @@ export function EditGearForm({ gearId }: { gearId: string }) {
   });
 
   const categories = categoriesData?.data ?? [];
-  const queryClient = useQueryClient();
+
+  // effect ছাড়াই derive করা — no cascading setState
+  const isAvailable =
+    isAvailableOverride ?? gearData?.data?.isAvailable ?? true;
 
   const form = useForm<GearFormValues>({
     resolver: zodResolver(gearFormSchema),
@@ -85,11 +102,19 @@ export function EditGearForm({ gearId }: { gearId: string }) {
         } as never,
         accessToken!,
       );
+
+      await queryClient.invalidateQueries({ queryKey: ["my-gear"] });
       await queryClient.invalidateQueries({
-        queryKey: ["my-gear"],
+        queryKey: ["provider-gear", gearId],
       });
+
       toast.success("Gear updated successfully!");
-      router.push("/dashboard/provider/gear");
+
+      if (onSuccess) {
+        onSuccess();
+      } else {
+        router.push("/dashboard/provider/gear");
+      }
     } catch (error) {
       toast.error(
         error instanceof Error ? error.message : "Failed to update gear",
@@ -208,17 +233,30 @@ export function EditGearForm({ gearId }: { gearId: string }) {
         <Switch
           id="availability"
           checked={isAvailable}
-          onCheckedChange={setIsAvailable}
+          onCheckedChange={setIsAvailableOverride}
         />
       </Field>
 
-      <Button
-        type="submit"
-        disabled={isLoading}
-        className="w-full rounded-full"
-      >
-        {isLoading ? "Saving..." : "Save Changes"}
-      </Button>
+      <div className="flex gap-3">
+        <Button
+          type="submit"
+          disabled={isLoading}
+          className="flex-1 rounded-full"
+        >
+          {isLoading ? "Saving..." : "Save Changes"}
+        </Button>
+
+        {onCancel && (
+          <Button
+            type="button"
+            variant="outline"
+            onClick={onCancel}
+            className="rounded-full"
+          >
+            Cancel
+          </Button>
+        )}
+      </div>
     </form>
   );
 }

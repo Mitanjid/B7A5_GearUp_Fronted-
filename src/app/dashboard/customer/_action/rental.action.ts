@@ -6,6 +6,13 @@ interface CreateRentalPayload {
   endDate: string;
 }
 
+export interface RentalReview {
+  id: string;
+  rating: number;
+  comment: string | null;
+  createdAt: string;
+}
+
 export interface RentalOrder {
   id: string;
   startDate: string;
@@ -25,6 +32,7 @@ export interface RentalOrder {
     pricePerDay: string;
     provider: { name: string };
   };
+  review: RentalReview | null; // 👈 নতুন field
 }
 
 interface RentalListResponse {

@@ -33,6 +33,7 @@ async function apiFetch<T>(
 
 export const apiClient = {
   get: <T>(endpoint: string, token?: string) =>
+    
     apiFetch<T>(endpoint, { method: "GET", token }),
 
   post: <T>(endpoint: string, body: unknown, token?: string) =>

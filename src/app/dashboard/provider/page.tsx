@@ -17,6 +17,7 @@ import {
   Plus,
   ArrowUpRight,
   RefreshCw,
+  DollarSign,
 } from "lucide-react";
 
 const quickActions = [
@@ -179,6 +180,24 @@ export default function ProviderDashboardPage() {
 
                 <p className="mt-1 text-xs text-muted-foreground">
                   Orders waiting for action
+                </p>
+              </CardContent>
+            </Card>
+            <Card className="rounded-2xl border-border/70 bg-card shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md">
+              <CardHeader className="flex flex-row items-center justify-between pb-2">
+                <CardTitle className="text-sm font-medium text-muted-foreground">
+                  Total Earnings
+                </CardTitle>
+                <div className="flex size-10 items-center justify-center rounded-xl bg-green-500/10 text-green-600">
+                  <DollarSign className="size-5" />
+                </div>
+              </CardHeader>
+              <CardContent>
+                <p className="text-3xl font-bold tracking-tight">
+                  ${(stats?.totalEarnings ?? 0).toFixed(2)}
+                </p>
+                <p className="mt-1 text-xs text-muted-foreground">
+                  From completed payments
                 </p>
               </CardContent>
             </Card>
