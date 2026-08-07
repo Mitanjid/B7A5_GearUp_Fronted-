@@ -42,19 +42,27 @@ export function MyGearTable() {
 
   const handleDelete = async (id: string) => {
     setLoadingId(id);
+
     try {
       await deleteGear(id, accessToken!);
+
       toast.success("Gear deleted successfully");
-      queryClient.invalidateQueries({ queryKey: ["my-gear"] });
+
+      queryClient.invalidateQueries({
+        queryKey: ["my-gear"],
+      });
+
       setOpenDialogId(null);
-    } catch (error) {
-      toast.error(
-        error instanceof Error ? error.message : "Failed to delete gear",
-      );
-    } finally {
-      setLoadingId(null);
+    } catch (error: unknown) {
+  const message =
+    error instanceof Error
+      ? error.message
+      : "This gear has rental history and cannot be deleted.";
+
+  toast.error(message);
+}
     }
-  };
+
 
   if (isLoading) return <Skeleton className="h-64 w-full" />;
 

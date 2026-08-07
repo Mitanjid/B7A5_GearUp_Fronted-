@@ -13,6 +13,14 @@ export interface RentalReview {
   createdAt: string;
 }
 
+export interface PaymentRecord {
+  id: string;
+  status: "PENDING" | "COMPLETED" | "FAILED";
+  amount: string;
+  method: "STRIPE" | "SSLCOMMERZ";
+  paidAt: string | null;
+}
+
 export interface RentalOrder {
   id: string;
   startDate: string;
@@ -25,14 +33,22 @@ export interface RentalOrder {
     | "PICKED_UP"
     | "RETURNED"
     | "CANCELLED";
+
   gearItem: {
     id: string;
     name: string;
     imageUrl: string | null;
     pricePerDay: string;
-    provider: { name: string };
+    provider: {
+      name: string;
+    };
   };
-  review: RentalReview | null; // 👈 নতুন field
+
+  review: RentalReview | null;
+}
+
+export interface RentalOrderDetail extends RentalOrder {
+  payments: PaymentRecord[];
 }
 
 interface RentalListResponse {
@@ -41,13 +57,39 @@ interface RentalListResponse {
   data: RentalOrder[];
 }
 
+interface RentalDetailResponse {
+  success: boolean;
+  message: string;
+  data: RentalOrderDetail;
+}
+
+// =========================
+// Create Rental
+// =========================
+
 export async function createRental(
   payload: CreateRentalPayload,
   token: string,
 ) {
-  return apiClient.post("/api/rentals", payload, token);
+  return apiClient.post<{
+    success: boolean;
+    message: string;
+    data: RentalOrder;
+  }>("/api/rentals", payload, token);
 }
+
+// =========================
+// Customer Rentals
+// =========================
 
 export async function getCustomerRentals(token: string) {
   return apiClient.get<RentalListResponse>("/api/rentals", token);
+}
+
+// =========================
+// Rental Details
+// =========================
+
+export async function getRentalOrderById(id: string, token: string) {
+  return apiClient.get<RentalDetailResponse>(`/api/rentals/${id}`, token);
 }

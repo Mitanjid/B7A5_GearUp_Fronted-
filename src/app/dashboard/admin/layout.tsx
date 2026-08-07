@@ -8,7 +8,7 @@ export default function AdminLayout({
 }) {
   return (
     <RoleGuard allowedRole="ADMIN">
-      <DashboardLayout>{children}</DashboardLayout>;
+      <DashboardLayout>{children}</DashboardLayout>
     </RoleGuard>
   );
  

@@ -16,7 +16,7 @@ export function FeaturedGear() {
     queryFn: () => getAllGear(),
   });
 
-  const gearList = (data?.data ?? []).slice(0, 8);
+ const gearList = (data?.data?.data ?? []).slice(0, 8);
 
   return (
     <section className="mx-auto max-w-6xl px-4 py-16">

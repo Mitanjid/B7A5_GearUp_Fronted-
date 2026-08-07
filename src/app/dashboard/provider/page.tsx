@@ -56,6 +56,7 @@ export default function ProviderDashboardPage() {
     queryKey: ["provider-stats"],
     queryFn: () => getProviderStats(accessToken!),
     enabled: !!accessToken,
+    refetchInterval: 15000,
   });
 
   return (

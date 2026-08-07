@@ -27,5 +27,5 @@ export function RoleGuard({ children, allowedRole }: RoleGuardProps) {
     return null;
   }
 
-  return <div className="mx-auto max-w-auto px-4 py-8">{children}</div>;
+  return <>{children}</>; 
 }

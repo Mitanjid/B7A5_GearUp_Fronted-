@@ -8,6 +8,7 @@ import {
   type AdminUser,
 } from "../_action/admin.action";
 import { useAuthStore } from "@/store/auth-store";
+
 import {
   Table,
   TableBody,
@@ -16,9 +17,11 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+
 import {
   AlertDialog,
   AlertDialogCancel,
@@ -29,6 +32,7 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
+
 import { Skeleton } from "@/components/ui/skeleton";
 import { toast } from "sonner";
 
@@ -39,6 +43,10 @@ export function UserTable() {
   const [loadingId, setLoadingId] = useState<string | null>(null);
   const [openDialogId, setOpenDialogId] = useState<string | null>(null);
   const [search, setSearch] = useState("");
+
+  // Pagination
+  const [page, setPage] = useState(1);
+  const usersPerPage = 5;
 
   const { data, isLoading } = useQuery({
     queryKey: ["admin-users"],
@@ -55,7 +63,9 @@ export function UserTable() {
       await updateUserStatus(user.id, newStatus, accessToken!);
 
       toast.success(
-        `User ${newStatus === "ACTIVE" ? "activated" : "suspended"} successfully`,
+        `User ${
+          newStatus === "ACTIVE" ? "activated" : "suspended"
+        } successfully`,
       );
 
       queryClient.invalidateQueries({
@@ -78,6 +88,7 @@ export function UserTable() {
 
   const users = data?.data ?? [];
 
+  // Search
   const filteredUsers = users.filter((user) => {
     const keyword = search.toLowerCase();
 
@@ -87,17 +98,32 @@ export function UserTable() {
     );
   });
 
+  // Pagination
+  const totalPages = Math.ceil(filteredUsers.length / usersPerPage);
+
+  const startIndex = (page - 1) * usersPerPage;
+
+  const paginatedUsers = filteredUsers.slice(
+    startIndex,
+    startIndex + usersPerPage,
+  );
+
   return (
     <div className="space-y-4">
-      <div className="flex justify-between items-center">
+      {/* Search */}
+      <div className="flex items-center justify-between">
         <Input
           placeholder="Search by name or email..."
           value={search}
-          onChange={(e) => setSearch(e.target.value)}
+          onChange={(e) => {
+            setSearch(e.target.value);
+            setPage(1);
+          }}
           className="max-w-sm"
         />
       </div>
 
+      {/* User Table */}
       <Table>
         <TableHeader>
           <TableRow>
@@ -111,17 +137,21 @@ export function UserTable() {
         </TableHeader>
 
         <TableBody>
-          {filteredUsers.length > 0 ? (
-            filteredUsers.map((user) => (
+          {paginatedUsers.length > 0 ? (
+            paginatedUsers.map((user) => (
               <TableRow key={user.id}>
+                {/* Name */}
                 <TableCell className="font-medium">{user.name}</TableCell>
 
+                {/* Email */}
                 <TableCell>{user.email}</TableCell>
 
+                {/* Role */}
                 <TableCell>
                   <Badge variant="secondary">{user.role}</Badge>
                 </TableCell>
 
+                {/* Status */}
                 <TableCell>
                   <Badge
                     variant={
@@ -132,10 +162,12 @@ export function UserTable() {
                   </Badge>
                 </TableCell>
 
+                {/* Created */}
                 <TableCell>
                   {new Date(user.createdAt).toLocaleDateString()}
                 </TableCell>
 
+                {/* Action */}
                 <TableCell className="text-right">
                   <AlertDialog
                     open={openDialogId === user.id}
@@ -164,7 +196,8 @@ export function UserTable() {
                         <AlertDialogDescription>
                           Are you sure you want to{" "}
                           {user.status === "ACTIVE" ? "suspend" : "activate"}{" "}
-                          <strong>{user.name}</strong>&apos;s account?
+                          <strong>{user.name}</strong>
+                          &apos;s account?
                         </AlertDialogDescription>
                       </AlertDialogHeader>
 
@@ -187,7 +220,7 @@ export function UserTable() {
             <TableRow>
               <TableCell
                 colSpan={6}
-                className="text-center py-8 text-muted-foreground"
+                className="py-8 text-center text-muted-foreground"
               >
                 No users found.
               </TableCell>
@@ -195,6 +228,35 @@ export function UserTable() {
           )}
         </TableBody>
       </Table>
+
+      {/* Pagination */}
+      {filteredUsers.length > 0 && (
+        <div className="flex items-center justify-between pt-4">
+          <p className="text-sm text-muted-foreground">
+            Page {page} of {totalPages}
+          </p>
+
+          <div className="flex gap-2">
+            <Button
+              variant="outline"
+              size="sm"
+              disabled={page === 1}
+              onClick={() => setPage((prev) => prev - 1)}
+            >
+              Previous
+            </Button>
+
+            <Button
+              variant="outline"
+              size="sm"
+              disabled={page === totalPages || totalPages === 0}
+              onClick={() => setPage((prev) => prev + 1)}
+            >
+              Next
+            </Button>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

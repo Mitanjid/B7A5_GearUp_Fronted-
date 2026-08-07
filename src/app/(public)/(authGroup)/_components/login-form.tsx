@@ -6,6 +6,7 @@ import { useRouter } from "next/navigation";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Controller, useForm } from "react-hook-form";
 import { Eye, EyeOff } from "lucide-react";
+import Cookies from "js-cookie";
 import {
   loginSchema,
   type LoginFormValues,
@@ -33,7 +34,19 @@ export function LoginForm() {
     setIsLoading(true);
     try {
       const response = await loginUser(values);
+
       login(response.data.user, response.data.accessToken);
+
+      // Middleware পড়ার জন্য cookie তেও রাখা হচ্ছে
+      Cookies.set("accessToken", response.data.accessToken, {
+        expires: 7,
+        sameSite: "lax",
+      });
+      Cookies.set("userRole", response.data.user.role, {
+        expires: 7,
+        sameSite: "lax",
+      });
+
       toast.success("Logged in successfully!");
 
       const role = response.data.user.role;

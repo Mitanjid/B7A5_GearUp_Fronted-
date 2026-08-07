@@ -41,6 +41,7 @@ export function OrderTable() {
     queryKey: ["provider-orders"],
     queryFn: () => getProviderOrders(accessToken!),
     enabled: !!accessToken,
+    refetchInterval: 15000,
   });
 
   const handleUpdateStatus = async (id: string, newStatus: string) => {

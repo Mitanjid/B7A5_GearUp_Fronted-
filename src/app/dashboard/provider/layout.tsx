@@ -8,6 +8,6 @@ export default function ProviderLayout({
   children: React.ReactNode;
 }) {
   return <RoleGuard allowedRole="PROVIDER">
-    <DashboardLayout>{children}</DashboardLayout>;
+    <DashboardLayout>{children}</DashboardLayout>
   </RoleGuard>;
 }

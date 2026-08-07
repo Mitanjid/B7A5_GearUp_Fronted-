@@ -1,6 +1,6 @@
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
-
+import Cookies from "js-cookie";
 interface User {
   id: string;
   name: string;
@@ -29,8 +29,11 @@ export const useAuthStore = create<AuthState>()(
       login: (user, accessToken) =>
         set({ user, accessToken, isAuthenticated: true }),
 
-      logout: () =>
-        set({ user: null, accessToken: null, isAuthenticated: false }),
+      logout: () => {
+        Cookies.remove("accessToken");
+        Cookies.remove("userRole");
+        set({ user: null, accessToken: null, isAuthenticated: false });
+      },
 
       setHasHydrated: (state) => set({ hasHydrated: state }),
     }),
