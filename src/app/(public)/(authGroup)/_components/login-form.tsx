@@ -37,7 +37,7 @@ export function LoginForm() {
 
       login(response.data.user, response.data.accessToken);
 
-      // Middleware পড়ার জন্য cookie তেও রাখা হচ্ছে
+      //proxy পড়ার জন্য cookie তেও রাখা হচ্ছে
       Cookies.set("accessToken", response.data.accessToken, {
         expires: 7,
         sameSite: "lax",
