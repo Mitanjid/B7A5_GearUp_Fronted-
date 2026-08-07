@@ -10,16 +10,16 @@ GearUp is a responsive **Next.js (App Router)** frontend for a sports and outdoo
 
 | | |
 |---|---|
-| **Live Frontend** | `<your-vercel-url-here>` |
-| **Backend API** | `<your-render-url-here>` |
-| **Frontend Repo** | `<your-github-repo-url-here>` |
-| **Demo Video** | `<your-drive-or-loom-link-here>` |
+| **Live Frontend** | `` |
+| **Backend API** | `` |
+| **Frontend Repo** | `` |
+| **Demo Video** | `` |
 
 ### Admin Test Credentials
 
 ```
-Email    : <admin-email>
-Password : <admin-password>
+Email    :
+Password : 
 ```
 
 ---
@@ -86,7 +86,7 @@ src/
 ### 1. Clone & install
 
 ```bash
-git clone <your-repo-url>
+git clone
 cd gearup-frontend
 npm install
 ```
@@ -107,7 +107,7 @@ To point the app at a different backend (e.g. local vs. deployed), edit this val
 npm run dev
 ```
 
-App runs at `http://localhost:3000`.
+App runs at ``.
 
 ### 4. Build & start (production)
 
