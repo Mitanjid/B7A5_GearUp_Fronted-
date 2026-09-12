@@ -10,7 +10,7 @@ GearUp is a responsive **Next.js (App Router)** frontend for a sports and outdoo
 
 | | |
 |---|---|
-| **Live Frontend** | `` |
+| **Live Frontend** | `https://gearup-frontend-lovat.vercel.app` |
 | **Backend API** | `` |
 | **Frontend Repo** | `` |
 | **Demo Video** | `` |
